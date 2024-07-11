@@ -2,11 +2,10 @@ package pl.coderslab.project.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class HomeController {
-
+public class HomeControllerOld {
+/*
     @RequestMapping("/")
     @ResponseBody
     public String home() {
@@ -17,4 +16,6 @@ public class HomeController {
     public String home2AsFileJSP() {
         return "/index";
     }
+    */
+
 }

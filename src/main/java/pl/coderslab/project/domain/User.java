@@ -35,6 +35,9 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private Set<Invitation> invitations;
 
+    @ManyToOne
+    private Role role;
+
     public Set<Game> getGames() {
         return games;
     }
@@ -58,9 +61,6 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
-    @ManyToOne
-    private Role role;
 
     public User() {
     }
