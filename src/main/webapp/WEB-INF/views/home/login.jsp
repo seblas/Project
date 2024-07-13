@@ -6,15 +6,14 @@
 </head>
 <body>
 <h3>Logowanie</h3>
-<form:form method="post" action="/perform_login">
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+<form:form method="post" action="/perform_login" modelAttribute="user">
     <label>
         <p>Email</p>
-        <p><input type="text" name="username"/></p>
+        <p><form:input path="email" value="${user.email}"/></p>
     </label>
     <label>
         <p>Hasło</p>
-        <p><input type="password" name="password"/></p>
+        <p><form:password path="password"/></p>
     </label>
     <input type="submit" value="Zaloguj"/>
 </form:form>
