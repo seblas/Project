@@ -24,19 +24,19 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                        // .requestMatchers("/","/error", "/admin").permitAll()// dostęp nie wymaga uwierzytelnienia (dla wszystkich)
-                        .requestMatchers("/dashboard", "/dashboard/**").hasRole("USER") // dostęp wymaga uwierzytelnienia (dla zalogowanych) jako USER
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // dostęp wymaga uwierzytelnienia (dla zalogowanych) jako ADMIN
+                        .requestMatchers("/user", "/user/**").hasRole("USER") // dostęp wymaga uwierzytelnienia (dla zalogowanych) jako USER
+                        .requestMatchers("/user", "/admin", "/admin/**").hasRole("ADMIN") // dostęp wymaga uwierzytelnienia (dla zalogowanych) jako ADMIN
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/") // tu jest formularz logowania
                         .loginProcessingUrl("/perform_login") // tu formularz logowania przesyła dane, SS sprawdza te dane
-                        .defaultSuccessUrl("/dashboard", true) // przekierowanie na /dashboard po zalogowaniu
+                        .defaultSuccessUrl("/user", true) // przekierowanie na /dashboard po zalogowaniu
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/perform_logout") // adres do wylogowania, SS sprawdza
-                        .logoutSuccessUrl("/wylogowanie")
+                        .logoutSuccessUrl("/")
                         .permitAll()); // każdy ma dostęp do wylogowania
 
         return http.build();
