@@ -21,7 +21,8 @@ public class User {
 
     private int level;
 
-    private String address;
+    @ManyToOne
+    private Address address;
 
     private double latitude;
 
@@ -35,8 +36,8 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private Set<Invitation> invitations;
 
-    @ManyToOne
-    private Role role;
+    @ManyToMany(mappedBy = "users")
+    private Set<Role> roles;
 
     public Set<Game> getGames() {
         return games;
@@ -54,12 +55,12 @@ public class User {
         this.invitations = invitations;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public User() {
@@ -97,12 +98,12 @@ public class User {
         this.level = level;
     }
 
-    public String getAddress() {
-        return address;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public Address getAddress() {
+        return address;
     }
 
     public double getLatitude() {

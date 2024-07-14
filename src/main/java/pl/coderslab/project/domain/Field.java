@@ -14,7 +14,8 @@ public class Field {
 
     private String name;
 
-    private String address;
+    @OneToOne
+    private Address address;
 
     private String description;
 
@@ -44,11 +45,11 @@ public class Field {
         this.name = name;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
