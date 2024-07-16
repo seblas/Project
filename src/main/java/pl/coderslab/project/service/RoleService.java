@@ -28,6 +28,11 @@ public class RoleService {
         return roleRepository.findById(id);
     }
 
+    public Optional<Role> findByName(String name) {
+        return roleRepository.findByName(name);
+    }
+
+
     public List<Role> findAll() {
         return roleRepository.findAll();
     }
@@ -40,7 +45,7 @@ public class RoleService {
     }
 
     public void deleteRole(Role role) {
-        if(!roleRepository.existsById(role.getId())) {
+        if (!roleRepository.existsById(role.getId())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Role " + role + "not found");
         }
         roleRepository.delete(role);
@@ -48,11 +53,10 @@ public class RoleService {
 
     public Role updateRole(Long id, Role role) {
         Optional<Role> optionalRole = roleRepository.findById(id);
-        if(optionalRole.isPresent()) {
+        if (optionalRole.isPresent()) {
             role.setId(id);
             return roleRepository.save(role);
-        }
-        else {
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found with id " + id);
         }
     }

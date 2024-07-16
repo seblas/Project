@@ -1,6 +1,7 @@
 package pl.coderslab.project.domain;
 
 import jakarta.persistence.*;
+import pl.coderslab.project.validator.PolishCode;
 
 @Entity
 @Table(name = "addresses")
@@ -16,6 +17,7 @@ public class Address {
 
     private String number;
 
+    @PolishCode
     private String code;
 
     public Address() {
