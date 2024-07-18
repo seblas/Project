@@ -81,16 +81,24 @@ public class HomeController {
             model.addAttribute("levels", LEVELS);
             return "home/registration";
         }
+
+        // Sprawdzanie, czy adres jest pusty
+        if (user.getAddress() != null && user.getAddress().isEmpty()) {
+            user.setAddress(null);
+        }
+
+        // kodowanie hasła
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Set<Role> roles = new HashSet<>();
+
         Optional<Role> role = roleService.findByName("ROLE_USER");
-        if(role.isPresent()) {
-            roles.add(role.get());
-            user.setRoles(roles);
+        if (role.isPresent()) {
+            user.addRole(role.get());
             userService.saveUser(user);
+            logger.info("Użytkownik zarejestrowany z rolą 'ROLE_USER': {}", user.getEmail());
         } else {
             throw new RuntimeException("Role 'ROLE_USER' not found");
         }
+
         model.addAttribute("registrationSuccessMessage", REGISTRATION_SUCCESS_MESSAGE);
         return "home/index";
     }

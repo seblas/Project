@@ -2,6 +2,7 @@ package pl.coderslab.project.domain;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,9 +14,8 @@ public class Role {
 
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "roles_users")
-    private Set<User> users;
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 
     public Role() {
     }

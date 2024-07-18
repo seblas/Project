@@ -23,7 +23,6 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                       // .requestMatchers("/","/error", "/admin").permitAll()// dostęp nie wymaga uwierzytelnienia (dla wszystkich)
                         .requestMatchers("/user", "/user/**").hasRole("USER") // dostęp wymaga uwierzytelnienia (dla zalogowanych) jako USER
                         .requestMatchers("/user", "/admin", "/admin/**").hasRole("ADMIN") // dostęp wymaga uwierzytelnienia (dla zalogowanych) jako ADMIN
                         .anyRequest().permitAll()
@@ -31,7 +30,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/") // tu jest formularz logowania
                         .loginProcessingUrl("/perform_login") // tu formularz logowania przesyła dane, SS sprawdza te dane
-                        .defaultSuccessUrl("/user", true) // przekierowanie na /dashboard po zalogowaniu
+                        .defaultSuccessUrl("/user", true) // przekierowanie na /user po zalogowaniu
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -53,7 +52,9 @@ public class SecurityConfig {
         userDetailsManager.setUsersByUsernameQuery(
                 "SELECT email AS username, password, TRUE as enabled FROM users WHERE email = ?");
         userDetailsManager.setAuthoritiesByUsernameQuery(
-                "SELECT u.email AS username, r.name AS authority FROM users u JOIN roles r ON u.role_id = r.id WHERE u.email = ?");
+                "SELECT u.email AS username, r.name AS authority FROM users u " +
+                        "JOIN roles_users ru ON u.id = ru.users_id " +
+                        "JOIN roles r ON ru.roles_id = r.id WHERE u.email = ?");
         return userDetailsManager;
     }
 

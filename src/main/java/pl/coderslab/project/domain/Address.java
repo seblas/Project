@@ -62,4 +62,22 @@ public class Address {
     public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", number='" + number + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
+
+    public boolean isEmpty() {
+        return (street == null || street.isEmpty()) ||
+                (number == null || number.isEmpty()) ||
+                (city == null || city.isEmpty()) ||
+                (code == null || code.isEmpty());
+    }
 }

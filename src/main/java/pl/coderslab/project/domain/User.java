@@ -1,12 +1,14 @@
 package pl.coderslab.project.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +34,7 @@ public class User {
     @NotNull
     private int level;
 
+    @Valid
     @ManyToOne(cascade = CascadeType.ALL)
     private Address address;
 
@@ -41,16 +44,8 @@ public class User {
 
     private String password;
 
-    @Transient // aby nie było kolumney w bazie
+    @Transient // aby nie było kolumny w bazie
     private String confirmPassword;
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
 
     @ManyToMany(mappedBy = "users")
     private Set<Game> games;
@@ -58,8 +53,9 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private Set<Invitation> invitations;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Role> roles;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "roles_users")
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -90,6 +86,16 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        role.getUsers().remove(this);
     }
 
     public String getName() {
@@ -154,6 +160,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public void setId(Long id) {

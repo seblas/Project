@@ -26,7 +26,7 @@
         <p><form:select path="level" items="${levels}"/> <form:errors path="level"/></p>
     </label>
     <label>
-        <p>Kod i miejscowość</p>
+        <p>Kod i miejscowość<sup>**</sup></p>
         <p><form:input path="address.code" value="${user.address.code}" maxlength="6" minlength="6" size="6" name="code"/>
             <form:input path="address.city" value="${user.address.city}" name="city"/> <form:errors path="address.code"/>
             <form:errors path="address.city"/></p>
@@ -49,5 +49,6 @@
     <input type="submit" value="Zapisz"/>
 </form:form>
 <p><sup>*</sup> - pole wymagane</p>
+<p><sup>**</sup> - adres zapisze się tylko wtedy kiedy wypełnisz wszystkie pola</p>
 </body>
 </html>

@@ -10,7 +10,7 @@
     <h4>${registrationSuccessMessage}</h4>
 </c:if>
 <h3>Logowanie</h3>
-<form:form method="post" action="/">
+<form:form method="post" action="/perform_login">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <label>
         <p>Email</p>
