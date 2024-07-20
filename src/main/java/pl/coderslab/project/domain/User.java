@@ -53,7 +53,7 @@ public class User {
     @ManyToMany(mappedBy = "users")
     private Set<Invitation> invitations;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "roles_users")
     private Set<Role> roles = new HashSet<>();
 

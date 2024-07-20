@@ -3,6 +3,10 @@ package pl.coderslab.project.controller;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +27,7 @@ import java.util.*;
 
 @RequestMapping("/user")
 @Controller
+@Secured({"ROLE_USER", "ROLE_ADMIN"})
 public class UserController {
 
     private final BCryptPasswordEncoder passwordEncoder;
@@ -37,15 +42,28 @@ public class UserController {
     }
 
     @RequestMapping("")
-    @ResponseBody
-    public String home() {
-        return "User";
+    public String home(Model model) {
+        model.addAttribute("user", getLoggedUser());
+        return "user/index";
     }
 
     //private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-
-
-
+    private User getLoggedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = null;
+        if(authentication!=null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            System.out.println("userDetails: " + userDetails);
+            username = userDetails.getUsername();
+            System.out.println("userName: " + username);
+            Optional<User> user = userService.findByEmail(username);
+            if(user.isPresent()) {
+                System.out.println("znaleziony user: " + user.get());
+                return user.get();
+            }
+        }
+        return null;
+    }
 
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import pl.coderslab.project.domain.Role;
 import pl.coderslab.project.domain.User;
 import pl.coderslab.project.repository.UserRepository;
 
@@ -55,5 +56,13 @@ public class UserService {
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id " + id);
         }
+    }
+
+    public Optional<User> findByName(String name) {
+        return userRepository.findByName(name);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
