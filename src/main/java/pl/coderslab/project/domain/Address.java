@@ -80,4 +80,8 @@ public class Address {
                 (city == null || city.isEmpty()) ||
                 (code == null || code.isEmpty());
     }
+
+    public String getCityStreetAndNumber() {
+        return this.city + ", " + this.street + " " + this.number;
+    }
 }

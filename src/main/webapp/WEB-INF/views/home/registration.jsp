@@ -4,21 +4,26 @@
 <html>
 <head>
     <title>Rejestracja</title>
+    <style>
+        span[id$=".errors"] {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 <h3>Rejestracja</h3>
 <form:form method="post"  modelAttribute="user">
     <label>
         <p>Nazwa<sup>*</sup></p>
-        <p><form:input path="name" value="${user.name}" name="name"/> <form:errors path="name"/></p>
+        <p><form:input path="name" value="${user.name}" name="name" required="required"/> <form:errors path="name"/></p>
     </label>
     <label>
         <p>Email<sup>*</sup></p>
-        <p><form:input path="email" value="${user.email}" name="email"/> <form:errors path="email"/></p>
+        <p><form:input path="email" value="${user.email}" name="email" required="required"/> <form:errors path="email"/></p>
     </label>
     <label>
         <p>Data urodzenia<sup>*</sup></p>
-        <p><form:input path="dateOfBirth" value="${user.dateOfBirth}" type="date" name="date"/> <form:errors
+        <p><form:input path="dateOfBirth" value="${user.dateOfBirth}" type="date" name="date" required="required"/> <form:errors
                 path="dateOfBirth"/></p>
     </label>
     <label>
@@ -37,13 +42,13 @@
     </label>
     <label>
         <p>Hasło<sup>*</sup></p>
-        <p><form:password path="password"/>
+        <p><form:password path="password" required="required"/>
             <br>
             <form:errors path="password"/></p>
     </label>
     <label>
         <p>Powtórz hasło<sup>*</sup></p>
-        <p><form:password path="confirmPassword"/> <form:errors path="confirmPassword"/></p>
+        <p><form:password path="confirmPassword" required="required"/> <form:errors path="confirmPassword"/></p>
     </label>
 
     <input type="submit" value="Zapisz"/>

@@ -84,4 +84,17 @@ public class Field {
     public Long getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Field{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address=" + address +
+                ", description='" + description + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", games=" + games +
+                '}';
+    }
 }

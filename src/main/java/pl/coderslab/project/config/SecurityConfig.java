@@ -31,6 +31,7 @@ public class SecurityConfig {
                         .loginPage("/") // tu jest formularz logowania
                         .loginProcessingUrl("/perform_login") // tu formularz logowania przesyła dane, SS sprawdza te dane
                         .defaultSuccessUrl("/user", true) // przekierowanie na /user po zalogowaniu
+                        .failureUrl("/?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout

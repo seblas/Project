@@ -32,6 +32,10 @@ public class FieldService {
         return fieldRepository.findAll();
     }
 
+    public List<Field> findAllSortedByStreet() {
+        return fieldRepository.findAllSortedByStreet();
+    }
+
     public void deleteFieldById(Long id) {
         if (!fieldRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Field not found with id " + id);
