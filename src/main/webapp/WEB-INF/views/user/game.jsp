@@ -63,14 +63,19 @@
         </p>
     </label>
     <label>
+        <p>Ilość poszukiwanych graczy<sup>*</sup></p>
+        <p><form:input path="playersToFind" value="${game.playersToFind}" type="number" min="1" max="20" required="required"/>
+            <br>
+            <form:errors path="playersToFind"/>
+        </p>
+    </label>
+    <label>
         <p>Opis</p>
         <p><form:textarea path="description" value="${game.description}" cols="30" rows="6"/>
             <br>
             <form:errors path="description"/>
         </p>
     </label>
-
-
     <input type="submit" value="Zapisz"/>
 </form:form>
 <p><sup>*</sup> - pole wymagane</p>

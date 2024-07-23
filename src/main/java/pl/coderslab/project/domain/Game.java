@@ -42,6 +42,8 @@ public class Game {
 
     private LocalDateTime recruitmentEndTime;
 
+    private int playersToFind;
+
     public Game() {
     }
 
@@ -149,6 +151,14 @@ public class Game {
         this.description = description;
     }
 
+    public int getPlayersToFind() {
+        return playersToFind;
+    }
+
+    public void setPlayersToFind(int playersToFind) {
+        this.playersToFind = playersToFind;
+    }
+
     @Override
     public String toString() {
         return "Game{" +
@@ -164,6 +174,7 @@ public class Game {
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", recruitmentEndTime=" + recruitmentEndTime +
+                ", playersToFind=" + playersToFind +
                 '}';
     }
 }

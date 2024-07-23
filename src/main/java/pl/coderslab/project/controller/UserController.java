@@ -88,6 +88,10 @@ public class UserController {
             result.rejectValue("minAge", "error.game", "Minimalny wiek gracza nie może być większy od maksymalnego!");
         }
 
+        if(game.getPlayersToFind()<0 || game.getPlayersToFind()>20) {
+            result.rejectValue("playersToFind", "error.game", "Mozna szukać od 1 do 20 graczy!");
+        }
+
         if (result.hasErrors()) {
             result.getAllErrors().forEach(error -> logger.error("Validation error: {}", error));
             model.addAttribute("levels", LEVELS);
@@ -95,6 +99,9 @@ public class UserController {
             model.addAttribute("fields", fields);
             return "user/game";
         }
+        System.out.println("Dane poprawne");
+        // Szukanie graczy
+
         return null;
     }
 
