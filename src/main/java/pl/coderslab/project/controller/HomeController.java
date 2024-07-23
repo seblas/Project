@@ -1,5 +1,7 @@
 package pl.coderslab.project.controller;
 
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import pl.coderslab.project.domain.Address;
 import pl.coderslab.project.domain.Role;
 import pl.coderslab.project.domain.User;
+import pl.coderslab.project.service.GeocodingService;
 import pl.coderslab.project.service.RoleService;
 import pl.coderslab.project.service.UserService;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
@@ -85,6 +89,22 @@ public class HomeController {
         // Sprawdzanie, czy adres jest pusty
         if (user.getAddress() != null && user.getAddress().isEmpty()) {
             user.setAddress(null);
+        } else {
+            // Dodawanie koordynatów
+            String apiKey = "AIzaSyD0u91aZXxT9HKZoxGFhQMxXZ_TWkuqrNU";
+            GeocodingService geocodingService = new GeocodingService(apiKey);
+            try {
+                GeocodingResult[] results = geocodingService.getCoordinates(user.getAddress().toString());
+                if(results.length>0) {
+                    user.setLatitude(results[0].geometry.location.lat);
+                    user.setLongitude(results[0].geometry.location.lng);
+                }
+            } catch (ApiException | InterruptedException | IOException e) {
+                e.printStackTrace();
+                result.reject("address", "Unable to geocode address");
+                model.addAttribute("levels", LEVELS);
+                return "home/registration";
+            }
         }
 
         // kodowanie hasła
