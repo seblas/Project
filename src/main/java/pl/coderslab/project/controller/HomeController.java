@@ -37,11 +37,13 @@ public class HomeController {
     private final UserService userService;
     private final RoleService roleService;
     private static final String REGISTRATION_SUCCESS_MESSAGE = "Konto zostało załozone, zaloguj się";
+    private final GeocodingService geocodingService;
 
-    public HomeController(BCryptPasswordEncoder passwordEncoder, UserService userService, RoleService roleService) {
+    public HomeController(BCryptPasswordEncoder passwordEncoder, UserService userService, RoleService roleService, GeocodingService geocodingService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.roleService = roleService;
+        this.geocodingService = geocodingService;
     }
 
     @RequestMapping("/")
@@ -89,11 +91,10 @@ public class HomeController {
         // Sprawdzanie, czy adres jest pusty
         if (user.getAddress() != null && user.getAddress().isEmpty()) {
             user.setAddress(null);
+            user.setDistance(0);
         } else {
             // Dodawanie koordynatów
-            String apiKey = "AIzaSyD0u91aZXxT9HKZoxGFhQMxXZ_TWkuqrNU";
-            GeocodingService geocodingService = new GeocodingService(apiKey);
-            try {
+                        try {
                 GeocodingResult[] results = geocodingService.getCoordinates(user.getAddress().toString());
                 if(results.length>0) {
                     user.setLatitude(results[0].geometry.location.lat);

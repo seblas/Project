@@ -3,6 +3,7 @@ package pl.coderslab.project.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,7 +18,7 @@ public class Invitation {
 
     @ManyToMany
     @JoinTable(name = "invitations_users")
-    private Set<User> users;
+    private List<User> users;
 
     private boolean send;
 
@@ -45,11 +46,11 @@ public class Invitation {
         this.game = game;
     }
 
-    public Set<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 

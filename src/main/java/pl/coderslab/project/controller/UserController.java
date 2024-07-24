@@ -101,7 +101,10 @@ public class UserController {
         }
         System.out.println("Dane poprawne");
         // Szukanie graczy
+        List<User> users= userService.findByGame(game);
 
+        System.out.println("Pobrana lista graczy");
+        users.stream().forEach(System.out::println);
         return null;
     }
 

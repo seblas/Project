@@ -35,10 +35,17 @@
         <p><form:input path="address.code" value="${user.address.code}" maxlength="6" minlength="6" size="6" name="code"/>
             <form:input path="address.city" value="${user.address.city}" name="city"/> <form:errors path="address.code"/>
             <form:errors path="address.city"/></p>
-        <p> Ulica i numer domu</p>
+        <p> Ulica i numer domu<sup>**</sup></p>
         <p><form:input path="address.street" value="${user.address.street}" name="street"/>
             <form:input path="address.number" value="${user.address.number}" size="5" name="number"/> <form:errors path="address.street"/>
             <form:errors path="address.number"/></p>
+    </label>
+    <label>
+        <p>Odległość od boiska (km)<sup>**</sup></p>
+        <p><form:input path="distance" value="${user.distance}" type="number" min="1" max="50"/>
+            <br>
+            <form:errors path="distance"/>
+        </p>
     </label>
     <label>
         <p>Hasło<sup>*</sup></p>

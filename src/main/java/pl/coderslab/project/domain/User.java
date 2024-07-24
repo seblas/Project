@@ -42,6 +42,8 @@ public class User {
 
     private double longitude;
 
+    private int distance;
+
     private String password;
 
     @Transient // aby nie było kolumny w bazie
@@ -154,6 +156,14 @@ public class User {
         this.longitude = longitude;
     }
 
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -176,5 +186,15 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "dateOfBirth=" + dateOfBirth +
+                ", level=" + level +
+                ", address=" + address +
+                ", distance=" + distance +
+                '}';
     }
 }
