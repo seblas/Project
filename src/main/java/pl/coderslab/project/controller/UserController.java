@@ -13,9 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.project.domain.*;
-import pl.coderslab.project.service.FieldService;
-import pl.coderslab.project.service.RoleService;
-import pl.coderslab.project.service.UserService;
+import pl.coderslab.project.service.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,12 +38,16 @@ public class UserController {
         put(4, "bardzo dobry");
         put(5, "zawodowiec");
     }};
+    private final InvitationService invitationService;
+    private final GameService gameService;
 
-    public UserController(BCryptPasswordEncoder passwordEncoder, UserService userService, RoleService roleService, FieldService fieldService) {
+    public UserController(BCryptPasswordEncoder passwordEncoder, UserService userService, RoleService roleService, FieldService fieldService, InvitationService invitationService, GameService gameService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.roleService = roleService;
         this.fieldService = fieldService;
+        this.invitationService = invitationService;
+        this.gameService = gameService;
     }
 
     @RequestMapping("")
@@ -64,10 +66,9 @@ public class UserController {
 
     @PostMapping("/game")
     public String Game(@Valid Game game, BindingResult result, Model model) {
-        if(game.getStartTime()==null || game.getEndTime()==null || game.getRecruitmentEndTime()==null) {
+        if (game.getStartTime() == null || game.getEndTime() == null || game.getRecruitmentEndTime() == null) {
             result.rejectValue("recruitmentEndTime", "error.game", "Wszystkie pola z datami muszą być wypełnione!");
-        }
-        else {
+        } else {
             if (game.getMaxLevel() < game.getMinLevel()) {
                 result.rejectValue("minLevel", "error.game", "Minimalny poziom nie może być wyższy niż maksymalny!");
             }
@@ -81,14 +82,14 @@ public class UserController {
                 result.rejectValue("recruitmentEndTime", "error.game", "Termin zgłaszania już upłynął!");
             }
         }
-        if(game.getCost()<0) {
+        if (game.getCost() < 0) {
             result.rejectValue("cost", "error.game", "Koszt gry nie może być ujemny!");
         }
-        if(game.getMinAge()>game.getMaxAge()) {
+        if (game.getMinAge() > game.getMaxAge()) {
             result.rejectValue("minAge", "error.game", "Minimalny wiek gracza nie może być większy od maksymalnego!");
         }
 
-        if(game.getPlayersToFind()<0 || game.getPlayersToFind()>20) {
+        if (game.getPlayersToFind() < 0 || game.getPlayersToFind() > 20) {
             result.rejectValue("playersToFind", "error.game", "Mozna szukać od 1 do 20 graczy!");
         }
 
@@ -100,11 +101,20 @@ public class UserController {
             return "user/game";
         }
         System.out.println("Dane poprawne");
+        game.setCreator((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        gameService.saveGame(game);
+
         // Szukanie graczy
-        List<User> users= userService.findByGame(game);
+        List<User> users = userService.findByGame(game);
 
         System.out.println("Pobrana lista graczy");
         users.stream().forEach(System.out::println);
+
+        // Przygotowania zaproszenia
+        Invitation invitation = new Invitation();
+        invitation.setGame(game);
+        invitation.setUsers(users);
+
         return null;
     }
 
@@ -112,11 +122,11 @@ public class UserController {
     private User getLoggedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = null;
-        if(authentication!=null && authentication.getPrincipal() instanceof UserDetails) {
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             username = userDetails.getUsername();
             Optional<User> user = userService.findByEmail(username);
-            if(user.isPresent()) {
+            if (user.isPresent()) {
                 return user.get();
             }
         }

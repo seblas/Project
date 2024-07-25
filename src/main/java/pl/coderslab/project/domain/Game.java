@@ -15,9 +15,20 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    private User creator;
+
     @ManyToMany
     @JoinTable(name = "games_users")
     private Set<User> users;
+
+    @ManyToMany
+    @JoinTable(
+            name = "game_accepted_users",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> acceptedUsers;
 
     @ManyToOne
     private Field field;
@@ -45,6 +56,14 @@ public class Game {
     private int playersToFind;
 
     public Game() {
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 
     public Field getField() {
@@ -95,13 +114,13 @@ public class Game {
         this.users = users;
     }
 
-    //public LocalDate getDate() {
-     //   return date;
-    //}
+    public Set<User> getAcceptedUsers() {
+        return acceptedUsers;
+    }
 
-    //public void setDate(LocalDate date) {
-     //   this.date = date;
-    //}
+    public void setAcceptedUsers(Set<User> acceptedUsers) {
+        this.acceptedUsers = acceptedUsers;
+    }
 
     public double getCost() {
         return cost;
