@@ -22,5 +22,29 @@
 <div style="text-align: center">
     <a href="<c:out value="/user/game"/>">Szukaj graczy (dodaj nową grę)</a>
 </div>
+<br>
+<div>
+    <p>Twoje gry</p>
+    <table>
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>boisko</th>
+            <th>czas gry</th>
+            <th>termin zgłoszeń</th>
+            <th>status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${gamesToJSP}" var="game">
+            <tr>
+                <c:forEach items="${game}" var="detail">
+                    <td>${detail}</td>
+                </c:forEach>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

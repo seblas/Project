@@ -54,6 +54,24 @@ public class UserController {
 
     @RequestMapping("")
     public String home(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> creatorOptional = userService.findByEmail(username);
+        if (creatorOptional.isEmpty()) {
+            return "redirect:/";
+        }
+        User creator = creatorOptional.get();
+        List<Game> games = gameService.findGameByCreator(creator);
+        List<List<String>> gamesToJSP = new ArrayList<>();
+        for(Game game : games) {
+            gamesToJSP.add(
+                    List.of(game.getId().toString(), game.getField().getName(),
+                            game.getStartTime().toLocalDate() + " godz. " + game.getStartTime().toLocalTime() +
+                            " - " + game.getEndTime().toLocalTime(),
+                            game.getRecruitmentEndTime().toLocalDate() + " godz. " + game.getRecruitmentEndTime().toLocalTime(),
+                            game.isActive() ? "aktywna" : "nieaktywna")
+            );
+        }
+        model.addAttribute("gamesToJSP", gamesToJSP);
         return "user/index";
     }
 
@@ -138,6 +156,30 @@ public class UserController {
         System.out.println(message);
 
         model.addAttribute("message", "Gra została dodana, zaproszono " + users.size() + " graczy.");
+
+
+
+
+
+
+        List<Game> games = gameService.findGameByCreator(creator);
+        List<List<String>> gamesToJSP = new ArrayList<>();
+        for(Game g : games) {
+            gamesToJSP.add(
+                    List.of(g.getId().toString(), g.getField().getName(),
+                            g.getStartTime().toLocalDate() + " godz. " + g.getStartTime().toLocalTime() +
+                                    " - " + g.getEndTime().toLocalTime(),
+                            g.getRecruitmentEndTime().toLocalDate() + " godz. " + g.getRecruitmentEndTime().toLocalTime(),
+                            g.isActive() ? "aktywna" : "nieaktywna")
+            );
+        }
+        model.addAttribute("gamesToJSP", gamesToJSP);
+
+
+
+
+
+
         return "user/index";
     }
 

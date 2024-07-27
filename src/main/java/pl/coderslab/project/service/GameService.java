@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import pl.coderslab.project.domain.Game;
+import pl.coderslab.project.domain.User;
 import pl.coderslab.project.repository.GameRepository;
 
 import java.time.LocalDateTime;
@@ -56,5 +57,9 @@ public class GameService {
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found with id " + id);
         }
+    }
+
+    public List<Game> findGameByCreator(User user) {
+        return gameRepository.findGamesByCreator(user);
     }
 }

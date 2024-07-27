@@ -15,5 +15,5 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface GameRepository extends JpaRepository<Game, Long> {
-
+    List<Game> findGamesByCreator(User user);
 }
