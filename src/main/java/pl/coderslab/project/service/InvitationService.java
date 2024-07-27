@@ -72,7 +72,7 @@ public class InvitationService {
         System.out.println("Hash: " + hash);
         hash = Base64.getEncoder().encodeToString((game.getId() + ":" + user.getId() + ":" + System.currentTimeMillis()).getBytes());
         String message = "Zapraszam Cię do gry\n" +
-                "Boisko: " + field.getName() + "\n" +
+                "Boisko: " + field.getName() + " (" + field.getDescription() + ")\n" +
                 "Adres: " + address.getCode() + " " + address.getCityStreetAndNumber() + "\n" +
                 "Czas gry: od " + game.getStartTime().toLocalDate() + " godz. " + game.getStartTime().toLocalTime() +
                 " do " + game.getEndTime().toLocalDate() + " godz. " + game.getEndTime().toLocalTime() + "\n" +

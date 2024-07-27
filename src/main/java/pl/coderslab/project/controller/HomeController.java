@@ -89,11 +89,11 @@ public class HomeController {
         }
 
         // Sprawdzanie, czy adres jest pusty
-        if (user.getAddress() != null && user.getAddress().isEmpty()) {
+        if ((user.getAddress() != null && user.getAddress().isEmpty()) || user.getDistance()==0) {
             user.setAddress(null);
             user.setDistance(0);
         } else {
-            // Dodawanie koordynatów
+            // Dodawanie koordynatów - obecnie nieużywane
                         try {
                 GeocodingResult[] results = geocodingService.getCoordinates(user.getAddress().toString());
                 if(results.length>0) {

@@ -54,7 +54,6 @@ public class GameController {
         System.out.println("Optional<Invitation>: " + optionalInvitation.isPresent());
         if(optionalInvitation.isPresent()) {
             Optional<Game> optionalGame = gameService.findById(optionalInvitation.get().getGame().getId());
-                    //gameService.findByIdAndActiveAndTime(optionalInvitation.get().getGame().getId(), true, )
             if(optionalGame.isPresent()) {
                 Game game = optionalGame.get();
                 System.out.println("Znaleziona gra: " + game);
@@ -63,7 +62,7 @@ public class GameController {
                 Set<User> acceptedPlayers = game.getAcceptedPlayers();
 
                 if(game.isActive()) System.out.println("Gra jest aktywna");
-                if(game.getRecruitmentEndTime().isAfter(LocalDateTime.now())) System.out.println("Czas jest ok");
+                if(game.getRecruitmentEndTime().isAfter(LocalDateTime.now().plusMinutes(1))) System.out.println("Czas jest ok");
                 if(acceptedPlayers.size()<game.getPlayersToFind()) System.out.println("Ilość graczy ok");
 
 

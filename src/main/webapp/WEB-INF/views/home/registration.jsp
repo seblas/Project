@@ -42,7 +42,7 @@
     </label>
     <label>
         <p>Odległość od boiska (km)<sup>**</sup></p>
-        <p><form:input path="distance" value="${user.distance}" type="number" min="1" max="50"/>
+        <p><form:input path="distance" value="${user.distance}" type="number" min="0" max="50"/>
             <br>
             <form:errors path="distance"/>
         </p>
@@ -60,7 +60,7 @@
 
     <input type="submit" value="Zapisz"/>
 </form:form>
-<p><sup>*</sup> - pole wymagane</p>
-<p><sup>**</sup> - adres zapisze się tylko wtedy kiedy wypełnisz wszystkie pola</p>
+<p><sup>*</sup> - Pole wymagane</p>
+<p><sup>**</sup> - Adres zapisze się tylko wtedy kiedy wypełnisz wszystkie pola łącznie z odległościa od boiska większą niż zero.</p>
 </body>
 </html>

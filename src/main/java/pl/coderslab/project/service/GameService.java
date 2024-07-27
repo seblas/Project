@@ -57,8 +57,4 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found with id " + id);
         }
     }
-
-    public Optional<Game> findByIdAndActiveAndTime(Long id, boolean active, LocalDateTime recruitmentEndTime) {
-        return gameRepository.findByIdAndActiveAndTime(id, active, recruitmentEndTime);
-    }
 }

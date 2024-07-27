@@ -1,5 +1,6 @@
 package pl.coderslab.project.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -47,10 +48,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @Transactional
     public void deleteUser(User user) {
         if (!userRepository.existsById(user.getId())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User " + user + "not found");
         }
+        user.getRoles().clear();
         userRepository.delete(user);
     }
 

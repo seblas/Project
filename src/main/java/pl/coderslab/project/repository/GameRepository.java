@@ -16,6 +16,4 @@ import java.util.Optional;
 @Transactional
 public interface GameRepository extends JpaRepository<Game, Long> {
 
-    @Query("select g from Game g where g.id =?1 and g.active=?2 and g.recruitmentEndTime<?3")
-    Optional<Game> findByIdAndActiveAndTime(Long id, boolean active, LocalDateTime recruitmentEndTime);
 }
