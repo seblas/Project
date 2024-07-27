@@ -13,12 +13,13 @@ public class Invitation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "game_id")
     private Game game;
 
-    @ManyToMany
-    @JoinTable(name = "invitations_users")
-    private List<User> users;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private boolean send;
 
@@ -26,9 +27,12 @@ public class Invitation {
 
     private boolean confirmed;
 
+    @Column(length = 1000)
     private String message;
 
     private String response;
+
+    private String invitationHash;
 
     public Long getId() {
         return id;
@@ -44,14 +48,6 @@ public class Invitation {
 
     public void setGame(Game game) {
         this.game = game;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 
     public boolean isSend() {
@@ -92,6 +88,22 @@ public class Invitation {
 
     public void setResponse(String response) {
         this.response = response;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getInvitationHash() {
+        return invitationHash;
+    }
+
+    public void setInvitationHash(String invitationHash) {
+        this.invitationHash = invitationHash;
     }
 
     public Invitation() {

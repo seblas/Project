@@ -19,6 +19,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToMany
+    @JoinTable(
+            name = "game_players",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id")
+    )
+    private Set<Game> games = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Invitation> invitations = new HashSet<>();
+
     @NotBlank
     @Size(min = 3, max = 20)
     private String name;
@@ -48,12 +59,6 @@ public class User {
 
     @Transient // aby nie było kolumny w bazie
     private String confirmPassword;
-
-    @ManyToMany(mappedBy = "users")
-    private Set<Game> games;
-
-    @ManyToMany(mappedBy = "users")
-    private Set<Invitation> invitations;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "roles_users")

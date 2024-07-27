@@ -90,11 +90,9 @@ public class Field {
         return "Field{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", address=" + address +
+                ", address=" + (address !=null ? address : "null") +
                 ", description='" + description + '\'' +
                 ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", games=" + games +
-                '}';
+                ", longitude=" + longitude;
     }
 }

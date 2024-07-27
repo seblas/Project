@@ -40,14 +40,16 @@ public class UserController {
     }};
     private final InvitationService invitationService;
     private final GameService gameService;
+    private final EmailService emailService;
 
-    public UserController(BCryptPasswordEncoder passwordEncoder, UserService userService, RoleService roleService, FieldService fieldService, InvitationService invitationService, GameService gameService) {
+    public UserController(BCryptPasswordEncoder passwordEncoder, UserService userService, RoleService roleService, FieldService fieldService, InvitationService invitationService, GameService gameService, EmailService emailService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.roleService = roleService;
         this.fieldService = fieldService;
         this.invitationService = invitationService;
         this.gameService = gameService;
+        this.emailService = emailService;
     }
 
     @RequestMapping("")
@@ -101,8 +103,18 @@ public class UserController {
             return "user/game";
         }
         System.out.println("Dane poprawne");
-        game.setCreator((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> creatorOptional = userService.findByEmail(username);
+        if (creatorOptional.isEmpty()) {
+                        return "redirect:/";
+        }
+        User creator = creatorOptional.get();
+        game.setCreator(creator);
         gameService.saveGame(game);
+
+        System.out.println("Game: ");
+        System.out.println(game);
 
         // Szukanie graczy
         List<User> users = userService.findByGame(game);
@@ -110,12 +122,19 @@ public class UserController {
         System.out.println("Pobrana lista graczy");
         users.stream().forEach(System.out::println);
 
-        // Przygotowania zaproszenia
-        Invitation invitation = new Invitation();
-        invitation.setGame(game);
-        invitation.setUsers(users);
+        // Tworzenie mapy graczy/zaproszeń
+        Map<User, Invitation> map = new HashMap<>();
+        for(User user : users) {
+            Invitation invitation = invitationService.setInvitation(game, user);
+            emailService.sendEmail(user.getEmail(), "Zaproszenie do gry nr " + game.getId(), invitation.getMessage());
+            invitation.setSend(true);
+            invitationService.saveInvitation(invitation);
+            map.put(user, invitation);
+        }
+        String message = "Tylu graczy zostało zaproszonych: " + users.size();
+        System.out.println(message);
 
-        return null;
+        return "user/index";
     }
 
     @ModelAttribute("user")

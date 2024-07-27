@@ -78,7 +78,7 @@ public class UserService {
         System.out.println("Druga data: " + endDate);
         List<User> users = userRepository.findUserByLevelAndAge(game.getMinLevel(), game.getMaxLevel(),
                 startDate, endDate);
-        System.out.println("Pierwsze filtrowanie graczy");
+        System.out.println("Pierwsze filtrowanie graczy (poziom i wiek)");
         users.forEach(System.out::println);
 
         List<User> filteredUsers = Stream.concat(

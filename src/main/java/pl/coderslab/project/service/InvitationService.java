@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import pl.coderslab.project.domain.Invitation;
+import pl.coderslab.project.domain.*;
 import pl.coderslab.project.repository.InvitationRepository;
 import pl.coderslab.project.repository.InvitationRepository;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,5 +57,29 @@ public class InvitationService {
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invitation not found with id " + id);
         }
+    }
+
+    public Invitation setInvitation(Game game, User user) {
+        Field field = game.getField();
+        Address address = field.getAddress();
+        System.out.println("User id: " + user.getId());
+        String hash = Base64.getEncoder().encodeToString((game.getId() + ":" + user.getId()).getBytes());
+        System.out.println("Hash: " + hash);
+        hash = Base64.getEncoder().encodeToString((game.getId() + ":" + user.getId() + ":" + System.currentTimeMillis()).getBytes());
+        String message = "Zapraszam Cię do gry\n" +
+                "Boisko: " + field.getName() + "\n" +
+                "Adres: " + address.getCode() + " " + address.getCityStreetAndNumber() + "\n" +
+                "Czas gry: od " + game.getStartTime().toLocalDate() + " godz. " + game.getStartTime().toLocalTime() +
+                " do " + game.getEndTime().toLocalDate() + " godz. " + game.getEndTime().toLocalTime() + "\n" +
+                "Koszt: " + game.getCost() + "\n\n" +
+                "Jeżeli chcesz zagrać to do " + game.getRecruitmentEndTime().toLocalDate() +
+                game.getRecruitmentEndTime().toLocalTime() + " kliknij link: \n" +
+                "http://localhost:8080/game/" + hash;
+        Invitation invitation = new Invitation();
+        invitation.setGame(game);
+        invitation.setMessage(message);
+        invitation.setUser(user);
+        invitation.setInvitationHash(hash);
+        return invitation;
     }
 }

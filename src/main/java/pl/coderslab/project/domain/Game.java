@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -15,25 +17,18 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     private User creator;
 
-    @ManyToMany
-    @JoinTable(name = "games_users")
-    private Set<User> users;
+    @ManyToMany(mappedBy = "games")
+    private Set<User> players;
 
-    @ManyToMany
-    @JoinTable(
-            name = "game_accepted_users",
-            joinColumns = @JoinColumn(name = "game_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> acceptedUsers;
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    @MapKeyJoinColumn(name = "user_id")
+    private Map<User, Invitation> invitations = new HashMap<>();
 
     @ManyToOne
     private Field field;
-
-    // private LocalDate date;
 
     private double cost;
 
@@ -64,6 +59,14 @@ public class Game {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public Map<User, Invitation> getInvitations() {
+        return invitations;
+    }
+
+    public void setInvitations(Map<User, Invitation> invitations) {
+        this.invitations = invitations;
     }
 
     public Field getField() {
@@ -104,22 +107,6 @@ public class Game {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public Set<User> getAcceptedUsers() {
-        return acceptedUsers;
-    }
-
-    public void setAcceptedUsers(Set<User> acceptedUsers) {
-        this.acceptedUsers = acceptedUsers;
     }
 
     public double getCost() {
@@ -178,11 +165,20 @@ public class Game {
         this.playersToFind = playersToFind;
     }
 
+    public Set<User> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Set<User> players) {
+        this.players = players;
+    }
+
     @Override
     public String toString() {
         return "Game{" +
                 "id=" + id +
-                ", users=" + users +
+                ", creatorId=" + (creator != null ? creator.getId() : null) + // unikaj wywoływania toString() na creator
+                ", players=" + players +
                 ", field=" + field +
                 ", cost=" + cost +
                 ", minAge=" + minAge +
