@@ -30,6 +30,11 @@ public class InvitationService {
         return invitationRepository.findById(id);
     }
 
+    public Optional<Invitation> findByInvitationHash(String hash) {
+        return invitationRepository.findByInvitationHash(hash);
+    }
+
+
     public List<Invitation> findAll() {
         return invitationRepository.findAll();
     }
@@ -71,9 +76,13 @@ public class InvitationService {
                 "Adres: " + address.getCode() + " " + address.getCityStreetAndNumber() + "\n" +
                 "Czas gry: od " + game.getStartTime().toLocalDate() + " godz. " + game.getStartTime().toLocalTime() +
                 " do " + game.getEndTime().toLocalDate() + " godz. " + game.getEndTime().toLocalTime() + "\n" +
-                "Koszt: " + game.getCost() + "\n\n" +
-                "Jeżeli chcesz zagrać to do " + game.getRecruitmentEndTime().toLocalDate() +
-                game.getRecruitmentEndTime().toLocalTime() + " kliknij link: \n" +
+                "Koszt: " + (int) game.getCost() + " zł\n\n";
+
+                if(!game.getDescription().isEmpty()) {
+                    message += "Dodatkowe informacje: \n" + game.getDescription() + "\n\n";
+                }
+                message += "Jeżeli chcesz zagrać to do " + game.getRecruitmentEndTime().toLocalDate() +
+                " godz. " + game.getRecruitmentEndTime().toLocalTime() + " kliknij link: \n" +
                 "http://localhost:8080/game/" + hash;
         Invitation invitation = new Invitation();
         invitation.setGame(game);

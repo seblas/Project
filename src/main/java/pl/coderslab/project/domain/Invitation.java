@@ -23,10 +23,6 @@ public class Invitation {
 
     private boolean send;
 
-    private boolean accepted;
-
-    private boolean confirmed;
-
     @Column(length = 1000)
     private String message;
 
@@ -56,22 +52,6 @@ public class Invitation {
 
     public void setSend(boolean send) {
         this.send = send;
-    }
-
-    public boolean isAccepted() {
-        return accepted;
-    }
-
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
-    }
-
-    public boolean isConfirmed() {
-        return confirmed;
-    }
-
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
     }
 
     public String getMessage() {

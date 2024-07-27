@@ -12,6 +12,13 @@
     <h2>Panel użytkownika</h2>
 </div>
 
+<c:if test="${not empty message}">
+    <div style="text-align: center; color: red">
+        ${message}
+    </div>
+</c:if>
+
+
 <div style="text-align: center">
     <a href="<c:out value="/user/game"/>">Szukaj graczy (dodaj nową grę)</a>
 </div>

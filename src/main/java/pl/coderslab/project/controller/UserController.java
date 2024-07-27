@@ -59,7 +59,10 @@ public class UserController {
 
     @GetMapping(value = "/game")
     public String formGame(Model model) {
-        model.addAttribute("game", new Game());
+        Game game = new Game();
+        game.setMinAge(16);
+        game.setMaxAge(60);
+        model.addAttribute("game", game);
         List<Field> fields = fieldService.findAllSortedByStreet();
         model.addAttribute("fields", fields);
         model.addAttribute("levels", LEVELS);
@@ -103,7 +106,7 @@ public class UserController {
             return "user/game";
         }
         System.out.println("Dane poprawne");
-
+        gameService.saveGame(game);
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> creatorOptional = userService.findByEmail(username);
         if (creatorOptional.isEmpty()) {
@@ -111,29 +114,30 @@ public class UserController {
         }
         User creator = creatorOptional.get();
         game.setCreator(creator);
-        gameService.saveGame(game);
 
         System.out.println("Game: ");
         System.out.println(game);
 
         // Szukanie graczy
-        List<User> users = userService.findByGame(game);
-
+        Set<User> users = userService.findByGame(game);
+        users.remove(userService.findById(creator.getId()).get());
+        game.setInvitedPlayers(users);
         System.out.println("Pobrana lista graczy");
         users.stream().forEach(System.out::println);
 
-        // Tworzenie mapy graczy/zaproszeń
-        Map<User, Invitation> map = new HashMap<>();
+        // Tworzenie i wysyłanie zaproszeń
         for(User user : users) {
             Invitation invitation = invitationService.setInvitation(game, user);
             emailService.sendEmail(user.getEmail(), "Zaproszenie do gry nr " + game.getId(), invitation.getMessage());
             invitation.setSend(true);
             invitationService.saveInvitation(invitation);
-            map.put(user, invitation);
         }
+        game.setActive(true);
+        gameService.saveGame(game);
         String message = "Tylu graczy zostało zaproszonych: " + users.size();
         System.out.println(message);
 
+        model.addAttribute("message", "Gra została dodana, zaproszono " + users.size() + " graczy.");
         return "user/index";
     }
 

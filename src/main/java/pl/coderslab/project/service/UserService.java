@@ -12,6 +12,7 @@ import pl.coderslab.project.repository.UserRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,17 +72,17 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public List<User> findByGame(Game game) {
+    public Set<User> findByGame(Game game) {
         LocalDate startDate = LocalDate.now().minusYears(game.getMaxAge());
         System.out.println("Pierwsza data: " + startDate);
         LocalDate endDate = LocalDate.now().minusYears(game.getMinAge());
         System.out.println("Druga data: " + endDate);
-        List<User> users = userRepository.findUserByLevelAndAge(game.getMinLevel(), game.getMaxLevel(),
+        Set<User> users = userRepository.findUserByLevelAndAge(game.getMinLevel(), game.getMaxLevel(),
                 startDate, endDate);
         System.out.println("Pierwsze filtrowanie graczy (poziom i wiek)");
         users.forEach(System.out::println);
 
-        List<User> filteredUsers = Stream.concat(
+        Set<User> filteredUsers = Stream.concat(
                 // gracze z adresem
                 users.stream()
                         .filter(user -> user.getAddress() != null && user.getDistance() > 0)
@@ -90,7 +91,7 @@ public class UserService {
                 // gracze bez adresu
                 users.stream()
                         .filter(user -> user.getAddress() == null || user.getDistance() == 0)
-        ).collect(Collectors.toList());
+        ).collect(Collectors.toSet());
         return filteredUsers;
     }
 }

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,10 +23,6 @@ public class Game {
 
     @ManyToMany(mappedBy = "games")
     private Set<User> players;
-
-    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-    @MapKeyJoinColumn(name = "user_id")
-    private Map<User, Invitation> invitations = new HashMap<>();
 
     @ManyToOne
     private Field field;
@@ -50,6 +47,24 @@ public class Game {
 
     private int playersToFind;
 
+    private boolean active;
+
+    @ManyToMany
+    @JoinTable(
+            name = "game_invited_players",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> invitedPlayers = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "game_accepted_players",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> acceptedPlayers = new HashSet<>();
+
     public Game() {
     }
 
@@ -59,14 +74,6 @@ public class Game {
 
     public void setCreator(User creator) {
         this.creator = creator;
-    }
-
-    public Map<User, Invitation> getInvitations() {
-        return invitations;
-    }
-
-    public void setInvitations(Map<User, Invitation> invitations) {
-        this.invitations = invitations;
     }
 
     public Field getField() {
@@ -173,6 +180,30 @@ public class Game {
         this.players = players;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Set<User> getAcceptedPlayers() {
+        return acceptedPlayers;
+    }
+
+    public void setAcceptedPlayers(Set<User> acceptedPlayers) {
+        this.acceptedPlayers = acceptedPlayers;
+    }
+
+    public Set<User> getInvitedPlayers() {
+        return invitedPlayers;
+    }
+
+    public void setInvitedPlayers(Set<User> invitedPlayers) {
+        this.invitedPlayers = invitedPlayers;
+    }
+
     @Override
     public String toString() {
         return "Game{" +
@@ -190,6 +221,7 @@ public class Game {
                 ", endTime=" + endTime +
                 ", recruitmentEndTime=" + recruitmentEndTime +
                 ", playersToFind=" + playersToFind +
+                ", active=" + active +
                 '}';
     }
 }

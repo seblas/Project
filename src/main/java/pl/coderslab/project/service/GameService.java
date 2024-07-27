@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.coderslab.project.domain.Game;
 import pl.coderslab.project.repository.GameRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,5 +56,9 @@ public class GameService {
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found with id " + id);
         }
+    }
+
+    public Optional<Game> findByIdAndActiveAndTime(Long id, boolean active, LocalDateTime recruitmentEndTime) {
+        return gameRepository.findByIdAndActiveAndTime(id, active, recruitmentEndTime);
     }
 }
